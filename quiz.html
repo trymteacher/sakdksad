@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Norsk Artsquiz</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#eef5ee;
+    margin:20px;
+    color:#222;
+}
+
+h1{
+    text-align:center;
+}
+
+.quiz{
+    background:white;
+    padding:20px;
+    margin-bottom:25px;
+    border-radius:10px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
+
+.question{
+    margin-bottom:25px;
+    padding-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question img{
+    width:300px;
+    max-width:100%;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+button{
+    background:#2e7d32;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.correct{
+    color:green;
+    font-weight:bold;
+}
+
+.wrong{
+    color:red;
+    font-weight:bold;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🌿 Norsk Artsquiz</h1>
+
+<div id="quiz-container"></div>
+
+<script>
+
+const quizzes = {
+
+"🌳 Trær og busker": [
+"Bjørk","Gran","Furu","Rogn","Osp","Selje","Hegg",
+"Eik","Ask","Lind","Lønn","Hassel","Einer"
+],
+
+"🌸 Planter og blomster": [
+"Hvitveis","Blåveis","Røsslyng","Løvetann",
+"Smørblomst","Tiriltunge","Prestekrage",
+"Skogstjerne","Geitrams","Tyttebær",
+"Blåbær","Molte"
+],
+
+"🐦 Fugler": [
+"Fossekall","Kjøttmeis","Blåmeis","Dompap",
+"Bokfink","Gråtrost","Svarttrost","Ravn",
+"Kråke","Skjære","Hakkespett","Stokkand",
+"Sangsvane","Grågås","Havørn","Kongeørn",
+"Linerle","Orrfugl"
+],
+
+"🐾 Pattedyr": [
+"Elg","Hjort","Rein","Rådyr","Hare",
+"Rev","Ulv","Gaupe","Jerv","Bjørn",
+"Bever","Ekorn","Oter","Mink","Røyskatt"
+],
+
+"🐝 Insekter og småkryp": [
+"Honningbie","Humle","Veps","Maur",
+"Marihøne","Dagsommerfugl","Mygg","Flått",
+"Øyenstikker","Gresshoppe","Edderkopp",
+"Skogsnile","Neshornbille","Tordivel","Gullbasse"
+],
+
+"🐟 Fisk": [
+"Laks","Ørret","Røye","Gjedde","Harr",
+"Torsk","Sei","Makrell","Kveite","Abbor"
+]
+
+};
+
+       const imageMap = {
+"Bjørk":"bjork.jpg",
+"Gran":"gran.jpg",
+"Furu":"furu.jpg",
+"Rogn":"rogn.jpg",
+"Osp":"osp.jpg",
+"Selje":"selje.jpg",
+"Hegg":"hegg.jpg",
+"Eik":"eik.jpg",
+"Ask":"ask.jpg",
+"Lind":"lind.jpg",
+"Lønn":"lonn.jpg",
+"Hassel":"hassel.jpg",
+"Einer":"einer.jpg",
+
+"Hvitveis":"hvitveis.jpg",
+"Blåveis":"blaveis.jpg",
+"Røsslyng":"rosslyng.jpg",
+"Løvetann":"lovetann.jpg",
+"Smørblomst":"smorblomst.jpg",
+"Tiriltunge":"tiriltunge.jpg",
+"Prestekrage":"prestekrage.jpg",
+"Skogstjerne":"skogstjerne.jpg",
+"Geitrams":"geitrams.jpg",
+"Tyttebær":"tyttebaer.jpg",
+"Blåbær":"blabaer.jpg",
+"Molte":"molte.jpg",
+
+"Fossekall":"fossekall.jpg",
+"Kjøttmeis":"kjottmeis.jpg",
+"Blåmeis":"blameis.jpg",
+"Dompap":"dompap.jpg",
+"Bokfink":"bokfink.jpg",
+"Gråtrost":"gratrost.jpg",
+"Svarttrost":"svarttrost.jpg",
+"Ravn":"ravn.jpg",
+"Kråke":"krake.jpg",
+"Skjære":"skjaere.jpg",
+"Hakkespett":"hakkespett.jpg",
+"Stokkand":"stokkand.jpg",
+"Sangsvane":"sangsvane.jpg",
+"Grågås":"gragas.jpg",
+"Havørn":"havorn.jpg",
+"Kongeørn":"kongeorn.jpg",
+"Linerle":"linerle.jpg",
+"Orrfugl":"orrfugl.jpg",
+
+"Elg":"elg.jpg",
+"Hjort":"hjort.jpg",
+"Rein":"rein.jpg",
+"Rådyr":"radyr.jpg",
+"Hare":"hare.jpg",
+"Rev":"rev.jpg",
+"Ulv":"ulv.jpg",
+"Gaupe":"gaupe.jpg",
+"Jerv":"jerv.jpg",
+"Bjørn":"bjorn.jpg",
+"Bever":"bever.jpg",
+"Ekorn":"ekorn.jpg",
+"Oter":"oter.jpg",
+"Mink":"mink.jpg",
+"Røyskatt":"royskatt.jpg",
+
+"Honningbie":"honningbie.jpg",
+"Humle":"humle.jpg",
+"Veps":"veps.jpg",
+"Maur":"maur.jpg",
+"Marihøne":"marihone.jpg",
+"Dagsommerfugl":"dagsommerfugl.jpg",
+"Mygg":"mygg.jpg",
+"Flått":"flatt.jpg",
+"Øyenstikker":"oyenstikker.jpg",
+"Gresshoppe":"gresshoppe.jpg",
+"Edderkopp":"edderkopp.jpg",
+"Skogsnile":"skogsnile.jpg",
+"Neshornbille":"neshornbille.jpg",
+"Tordivel":"tordivel.jpg",
+"Gullbasse":"gullbasse.jpg",
+
+"Laks":"laks.jpg",
+"Ørret":"orret.jpg",
+"Røye":"roye.jpg",
+"Gjedde":"gjedde.jpg",
+"Harr":"harr.jpg",
+"Torsk":"torsk.jpg",
+"Sei":"sei.jpg",
+"Makrell":"makrell.jpg",
+"Kveite":"kveite.jpg",
+"Abbor":"abbor.jpg"
+};
+
+function shuffle(array){
+    return [...array].sort(() => Math.random() - 0.5);
+}
+
+const container = document.getElementById("quiz-container");
+
+for(const [category, species] of Object.entries(quizzes)){
+
+    const section = document.createElement("div");
+    section.className = "quiz";
+
+    section.innerHTML = `<h2>${category}</h2>`;
+
+    species.forEach((correctAnswer,index)=>{
+
+        let alternatives =
+            shuffle(species.filter(x => x !== correctAnswer))
+            .slice(0,3);
+
+        alternatives.push(correctAnswer);
+        alternatives = shuffle(alternatives);
+
+        const id = category.replace(/\W/g,'') + index;
+
+     let html = `
+<div class="question">
+    <img src="${imageMap[correctAnswer]}" ong>Hvilken art er dette?</strong></p>
+`;
+
+        alternatives.forEach(option => {
+            html += `
+            <label>
+                <input type="radio" name="${id}" value="${option}">
+                ${option}
+            </label><br>
+            `;
+        });
+
+        html += `<div id="result-${id}"></div>`;
+        html += `</div>`;
+
+        section.innerHTML += html;
+    });
+
+    const button = document.createElement("button");
+    button.textContent = "Rett quiz";
+
+    button.onclick = () => {
+
+        const questions = section.querySelectorAll(".question");
+
+        questions.forEach((question, index) => {
+
+            const correctAnswer = species[index];
+
+            const selected =
+                question.querySelector("input[type='radio']:checked");
+
+            const result =
+                question.querySelector("div[id^='result-']");
+
+            if(selected &&
+               selected.value === correctAnswer){
+
+                result.innerHTML =
+                "<span class='correct'>✅ Riktig!</span>";
+
+            } else {
+
+                result.innerHTML =
+                "<span class='wrong'>❌ Riktig svar: "
+                + correctAnswer +
+                "</span>";
+            }
+
+        });
+
+    };
+
+    section.appendChild(button);
+    container.appendChild(section);
+}
+
+</script>
+
+</body>
+</html>
